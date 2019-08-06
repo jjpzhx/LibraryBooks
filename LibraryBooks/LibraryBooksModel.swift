@@ -54,10 +54,17 @@ extension LibraryBooksModel {
             libraryBooks.sort(){
                 $0.ratingControl < $1.ratingControl
             }
-            print("Rating Descending")
         case "Rating Descending":
             libraryBooks.sort(){
                 $0.ratingControl > $1.ratingControl
+            }
+        case "Date Read Ascending":
+            libraryBooks.sort(){
+                $0.dateRead < $1.dateRead
+            }
+        case "Date Read Descending":
+            libraryBooks.sort(){
+                $0.dateRead > $1.dateRead
             }
         default:
             print("Error")

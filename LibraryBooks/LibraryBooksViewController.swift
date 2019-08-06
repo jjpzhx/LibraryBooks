@@ -10,14 +10,17 @@ import UIKit
 
 
 final class LibraryBooksViewController: UIViewController {
+    //MARK: Properties
     
     @IBOutlet private weak var tableView: UITableView!
     private var model: LibraryBooksModel!
     private var checkLeftBarButtonItemStatus: Bool {return (model.count > 0 && !tableView.isEditing)}
     private var checkRightBarButtonItemStatus: Bool {return (!tableView.isEditing)}
+    
 }
 
 extension LibraryBooksViewController {
+    //MARK: Loading, Initialization
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +49,29 @@ extension LibraryBooksViewController {
         //Disable Edit and Sort navigation bar items if there are no rows in tableview.
         handleLeftBarItems()
     }
+}
+
+extension LibraryBooksViewController{
+    //MARK: Segue preparation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //This function will prepare the instantiation of WorkoutCreationModel
+        //If we are in editing mode, we will have to let WorkOutCreationModel that we are in that mode by setting
+        //isEditing = true. We accomplish that by testing whether sender is a Workout object or a UIBarButtonItem action.
+        //This variable is passed into WorkoutCreationModel's editing parameter which will update their isEditing variable.
+        
+        if let addABookViewController = segue.destination as? AddABookViewController {
+            let libraryBook: LibraryBook = sender as? LibraryBook ?? .defaultBook
+            let isEditing = (sender as? LibraryBook) != nil
+            
+            let addABookModel = AddABookModel(libraryBook: libraryBook, delegate: model, isEditing: isEditing)
+            addABookViewController.setup(model: addABookModel)
+        }
+    }
+}
+
+extension LibraryBooksViewController{
+    //MARK: Setting up UIAlerts and its helper functions
     
     @objc func sortTapped(){
         //create an alert for when the uiBarButtonItem is selected (defined in viewDidLoad).
@@ -56,6 +82,8 @@ extension LibraryBooksViewController {
         sortAlert.addAction(UIAlertAction(title: "Author", style: .default, handler: sortWorkoutStruct))
         sortAlert.addAction(UIAlertAction(title: "Rating Ascending", style: .default, handler: sortWorkoutStruct))
         sortAlert.addAction(UIAlertAction(title: "Rating Descending", style: .default, handler: sortWorkoutStruct))
+        sortAlert.addAction(UIAlertAction(title: "Date Read Ascending", style: .default, handler: sortWorkoutStruct))
+        sortAlert.addAction(UIAlertAction(title: "Date Read Descending", style: .default, handler: sortWorkoutStruct))
         sortAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         sortAlert.popoverPresentationController?.barButtonItem = self.navigationItem.leftBarButtonItem
         present(sortAlert, animated: true)
@@ -106,16 +134,6 @@ extension LibraryBooksViewController {
         handleRightBarItems()
     }
     
-    func handleLeftBarItems(){
-        //This function will set the Sort and Edit navigation bar button item to disabled if there are no Workout list items.
-        navigationItem.leftBarButtonItems![0].isEnabled = checkLeftBarButtonItemStatus
-        navigationItem.leftBarButtonItems![1].isEnabled = checkLeftBarButtonItemStatus
-    }
-    
-    func handleRightBarItems(){
-        navigationItem.rightBarButtonItems![0].isEnabled = checkRightBarButtonItemStatus
-    }
-    
     func sortWorkoutStruct(action: UIAlertAction){
         //this function will use the title of the UIAlertAction and call WorkoutListModel.sort
         //In WorkoutListModel.sort it will use the title in a case statement to determine what field to sort on in what order
@@ -140,23 +158,19 @@ extension LibraryBooksViewController {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        //This function will prepare the instantiation of WorkoutCreationModel
-        //If we are in editing mode, we will have to let WorkOutCreationModel that we are in that mode by setting
-        //isEditing = true. We accomplish that by testing whether sender is a Workout object or a UIBarButtonItem action.
-        //This variable is passed into WorkoutCreationModel's editing parameter which will update their isEditing variable.
-        
-        if let addABookViewController = segue.destination as? AddABookViewController {
-            let libraryBook: LibraryBook = sender as? LibraryBook ?? .defaultBook
-            let isEditing = (sender as? LibraryBook) != nil
-            
-            let addABookModel = AddABookModel(libraryBook: libraryBook, delegate: model, isEditing: isEditing)
-            addABookViewController.setup(model: addABookModel)
-        }
+    func handleLeftBarItems(){
+        //This function will set the Sort and Edit navigation bar button item to disabled if there are no Workout list items.
+        navigationItem.leftBarButtonItems![0].isEnabled = checkLeftBarButtonItemStatus
+        navigationItem.leftBarButtonItems![1].isEnabled = checkLeftBarButtonItemStatus
+    }
+    
+    func handleRightBarItems(){
+        navigationItem.rightBarButtonItems![0].isEnabled = checkRightBarButtonItemStatus
     }
 }
 
 extension LibraryBooksViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //Allow the tableview to know how many rows to display
         return model.count
