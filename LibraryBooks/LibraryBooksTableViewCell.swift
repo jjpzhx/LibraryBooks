@@ -12,6 +12,7 @@ final class LibraryBooksTableViewCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var authorLabel: UILabel!
+    @IBOutlet weak var ratingControlStackView: RatingControl!
     
     private(set) var libraryBook: LibraryBook!
     
@@ -20,8 +21,8 @@ final class LibraryBooksTableViewCell: UITableViewCell {
         
         titleLabel.text = libraryBook.bookTitle
         authorLabel.text = libraryBook.author
- 
-    }
+        ratingControlStackView.rating = libraryBook.ratingControl
+     }
 }
 
 

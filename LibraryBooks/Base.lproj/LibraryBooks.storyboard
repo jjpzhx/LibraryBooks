@@ -66,11 +66,16 @@
                                                         </label>
                                                     </subviews>
                                                 </stackView>
+                                                <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="aPF-m5-BhL" userLabel="RatingControlStackView" customClass="RatingControl" customModule="LibraryBooks" customModuleProvider="target">
+                                                    <rect key="frame" x="158" y="4" width="165" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                </stackView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration" identifier="BookList"/>
                                         <connections>
                                             <outlet property="authorLabel" destination="eLh-vQ-hQC" id="lQt-XG-c5F"/>
+                                            <outlet property="ratingControlStackView" destination="aPF-m5-BhL" id="B7d-0Z-W11"/>
                                             <outlet property="titleLabel" destination="paa-lW-m4d" id="Htu-1v-ZrR"/>
                                         </connections>
                                     </tableViewCell>
@@ -97,7 +102,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I0l-WU-vdl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="403" y="117"/>
+            <point key="canvasLocation" x="402.89855072463769" y="116.51785714285714"/>
         </scene>
         <!--AddABook-->
         <scene sceneID="haC-EK-Ku6">

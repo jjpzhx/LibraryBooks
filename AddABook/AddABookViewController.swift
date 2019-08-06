@@ -37,6 +37,9 @@ extension AddABookViewController{
         authorTextField.text = model.libraryBook.author
         noteTextView.text = model.libraryBook.notes
         
+        //initialize the ratingControl
+        ratingControl.rating = model.libraryBook.ratingControl
+        
         //Set dateReadTextField as a UIDatePicker object
         datePicker = UIDatePicker()
         datePicker.datePickerMode = UIDatePicker.Mode.date
