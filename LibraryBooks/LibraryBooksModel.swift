@@ -37,6 +37,60 @@ extension LibraryBooksModel {
         //returns a Workout object at a specified index
         return libraryBooks.element(at: index)
     }
+    
+    func sort(title: String){
+        //UIAlert function calls this function and passes in what type of sort a user is requesting.
+        //This function will sort accordingly.
+        switch title{
+        case "Title":
+            libraryBooks.sort(){
+                $0.bookTitle < $1.bookTitle
+            }
+        case "Author":
+            libraryBooks.sort(){
+                $0.author < $1.author
+            }
+        case "Rating Ascending":
+            libraryBooks.sort(){
+                $0.ratingControl < $1.ratingControl
+            }
+            print("Rating Descending")
+        case "Rating Descending":
+            libraryBooks.sort(){
+                $0.ratingControl > $1.ratingControl
+            }
+        default:
+            print("Error")
+        }
+        delegate?.dataRefreshed()
+    }
+    
+    func deleteAllLibraryBooksList(){
+        //First we have to fetch each row and delete from persistence file
+        //We then have to remove the workout from the structure
+        //After the above two is done refresh the tableview
+        
+        for row in libraryBooks{
+            persistence?.deleteFile(libraryBook: row)
+        }
+        libraryBooks.removeAll()
+        delegate?.dataRefreshed()
+    }
+    
+    func deleteSelectedLibraryBooksRow(indexPaths: [IndexPath]){
+        //This function will remove a single book recorded from the LibraryBook struct object.
+        //indexPath is an array of Int indexPath, so there can be multiple indices.
+        //This function is called when a user swipes on a tableview cell and selects delete or selects Delete from editing mode.
+        //Reversing the loop through indexPaths array because if we do it in ascending order it will cause a fatal error if the last index
+        //is selected.
+        for indexPath in indexPaths.reversed(){
+            
+            persistence?.deleteFile(libraryBook: libraryBooks(atIndex: indexPath.row)!)
+            libraryBooks.remove(at: indexPath.row)
+        }
+        
+        delegate?.dataRefreshed()
+    }
 }
 
 extension LibraryBooksModel: AddABookModelDelegate {

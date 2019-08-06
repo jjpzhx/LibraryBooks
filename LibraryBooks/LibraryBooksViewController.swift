@@ -13,10 +13,7 @@ final class LibraryBooksViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
      private var model: LibraryBooksModel!
-    
-
-    
-    
+      private var checkBarButtonItemStatus: Bool {return (model.count > 0 && !tableView.isEditing)}
 }
 
 extension LibraryBooksViewController {
@@ -25,7 +22,111 @@ extension LibraryBooksViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         model = LibraryBooksModel(delegate: self)
-        print("tableview did load")
+        
+        //set the "Sort" left UIBarButtonItem so that it will invoke sortTapped to pop up a UIAlertController
+        //Since we have two left UIBarButtonItems, we will have to differentiate by an array of leftBarButtonItems
+        let sort = UIBarButtonItem(title: "Sort", style: .plain, target: self, action: #selector(sortTapped))
+        let edit = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: #selector(editTapped))
+        
+        //UIToolbar button items
+        let deleteAll = UIBarButtonItem(title: "Delete All", style: .plain, target: self, action: #selector(deleteAllTapped))
+        let deleteSelected = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(deleteSelectedTapped))
+        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let cancel = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelTapped))
+        
+        //set the buttons on the navigation bar and tool bar
+        navigationItem.leftBarButtonItems = [sort, edit]
+        toolbarItems = [cancel, spacer, deleteAll, spacer, deleteSelected]
+        navigationController?.setToolbarHidden(true, animated: false)
+        
+        //allow users to select multiple table view cells when in edit mode
+        tableView.allowsMultipleSelectionDuringEditing = true
+    }
+    
+    @objc func sortTapped(){
+        //create an alert for when the uiBarButtonItem is selected (defined in viewDidLoad).
+        //use UIAlertController's object to prompt a user for the type of sort to be performed on the structure.
+        //Unless if Cancel is selected, it will call sortWorkoutSturct. This will then call model.sort on the WorkoutListModel
+        let sortAlert = UIAlertController(title: "Sort Book List By:", message: nil, preferredStyle: .alert)
+        sortAlert.addAction(UIAlertAction(title: "Title", style: .default, handler: sortWorkoutStruct))
+        sortAlert.addAction(UIAlertAction(title: "Author", style: .default, handler: sortWorkoutStruct))
+        sortAlert.addAction(UIAlertAction(title: "Rating Ascending", style: .default, handler: sortWorkoutStruct))
+        sortAlert.addAction(UIAlertAction(title: "Rating Descending", style: .default, handler: sortWorkoutStruct))
+        sortAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        sortAlert.popoverPresentationController?.barButtonItem = self.navigationItem.leftBarButtonItem
+        present(sortAlert, animated: true)
+    }
+    
+    @objc func deleteAllTapped(){
+        //create an alert for when the uiBarButtonItem is selected (defined in viewDidLoad).
+        //use UIAlertController's object to prompt a user if they are sure about deleting all workout list items.
+        //Unless if Cancel is selected, it will delete the persistence file, the libraryBooks list, and refresh the tableview.
+        let deleteAllAlert = UIAlertController(title: "Delete Library Books List", message: "Are you sure you want to delete all book items recorded? You cannot recover them if Yes is selected.", preferredStyle: .alert)
+        deleteAllAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: deleteAllLibraryBooksList))
+        deleteAllAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        deleteAllAlert.popoverPresentationController?.barButtonItem  = self.navigationItem.leftBarButtonItem
+        present(deleteAllAlert, animated: true)
+    }
+    
+    @objc func deleteSelectedTapped(){
+        //create an alert for when the uiBarButtonItem is selected (defined in viewDidLoad).
+        //use UIAlertController's object to prompt a user if they are sure about deleting all book list items selected.
+        //Unless if Cancel is selected, it will delete the persistence file, the libraryBooks list, and refresh the tableview.
+        if let selectedRows = tableView.indexPathsForSelectedRows{
+            
+            let deleteAlert = UIAlertController(title: "Delete \(selectedRows.count) items?", message: "Are you sure you want to delete \(selectedRows.count) items? You cannot recover them if Yes is selected.", preferredStyle: .alert)
+            deleteAlert.addAction(UIAlertAction(title: "Yes", style: .default, handler: deleteSelectedLibraryBooksList))
+            deleteAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            deleteAlert.popoverPresentationController?.barButtonItem  = self.navigationItem.leftBarButtonItem
+            present(deleteAlert, animated: true)
+        }
+    }
+    
+    @objc func cancelTapped(){
+        //This function will simply go out of edit mode and hide the toolbar
+        navigationController?.setToolbarHidden(true, animated: false)
+        tableView.isEditing = false
+        handleLeftBarItems()
+        
+    }
+    
+    @objc func editTapped(){
+        //Make Toolbar appear on the screen
+        tableView.isEditing  = true
+        navigationController?.setToolbarHidden(false, animated: false)
+        toolbarItems?.element(at: 4)?.isEnabled = false
+        handleLeftBarItems()
+    }
+    
+    func handleLeftBarItems(){
+        //This function will set the Sort and Edit navigation bar button item to disabled if there are no Workout list items.
+        navigationItem.leftBarButtonItems![0].isEnabled = checkBarButtonItemStatus
+        navigationItem.leftBarButtonItems![1].isEnabled = checkBarButtonItemStatus
+    }
+    
+    func sortWorkoutStruct(action: UIAlertAction){
+        //this function will use the title of the UIAlertAction and call WorkoutListModel.sort
+        //In WorkoutListModel.sort it will use the title in a case statement to determine what field to sort on in what order
+        model.sort(title: action.title!)
+    }
+    
+    func deleteAllLibraryBooksList(action: UIAlertAction){
+        //This function will call deleteAllWorkoutList in WorkoutListModel.
+        //WorkoutListModel will proceed to delete all persistence files associated with Workout objects one-by-one, delete all rows of Workout
+        //object, and refresh the tableview.
+        model.deleteAllLibraryBooksList()
+        navigationController?.setToolbarHidden(true, animated: false)
+        tableView.isEditing = false
+        handleLeftBarItems()
+    }
+    
+    func deleteSelectedLibraryBooksList(action: UIAlertAction){
+        if let selectedRows = tableView.indexPathsForSelectedRows{
+            model.deleteSelectedLibraryBooksRow(indexPaths: selectedRows)
+            navigationController?.setToolbarHidden(true, animated: false)
+            tableView.isEditing = false
+            handleLeftBarItems()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -66,7 +167,7 @@ extension LibraryBooksViewController: UITableViewDelegate{
         if editingStyle == .delete {
             // Delete the row from the data source
             //Another way this step below can be called is if a user goes into Edit mode and selects one or more rows to delete.
-            //model.deleteSelectedWorkoutListRow(indexPaths: [indexPath])
+            model.deleteSelectedLibraryBooksRow(indexPaths: [indexPath])
         }
     }
     
@@ -88,8 +189,8 @@ extension LibraryBooksViewController: UITableViewDelegate{
         else{
             //check to see if rows are selected when in edit mode
             if let selectedRows = tableView.indexPathsForSelectedRows{
-                //                toolbarItems?.element(at: 4)?.title = "Delete \(selectedRows.count)"
-                //                toolbarItems?.element(at: 4)?.isEnabled = true
+                toolbarItems?.element(at: 4)?.title = "Delete \(selectedRows.count)"
+                toolbarItems?.element(at: 4)?.isEnabled = true
             }
         }
     }
@@ -100,12 +201,12 @@ extension LibraryBooksViewController: UITableViewDelegate{
         if (tableView.isEditing){
             if let selectedRows = tableView.indexPathsForSelectedRows{
                 //there are still rows left. Update the Delete button text
-                //                toolbarItems?.element(at: 4)?.title = "Delete \(selectedRows.count)"
+                toolbarItems?.element(at: 4)?.title = "Delete \(selectedRows.count)"
             }
             else{
                 //case when there are no rows selected
-                //                toolbarItems?.element(at: 4)?.title = "Delete"
-                //                toolbarItems?.element(at: 4)?.isEnabled = false
+                toolbarItems?.element(at: 4)?.title = "Delete"
+                toolbarItems?.element(at: 4)?.isEnabled = false
             }
         }
     }
