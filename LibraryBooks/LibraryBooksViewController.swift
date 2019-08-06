@@ -12,8 +12,9 @@ import UIKit
 final class LibraryBooksViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
-     private var model: LibraryBooksModel!
-      private var checkBarButtonItemStatus: Bool {return (model.count > 0 && !tableView.isEditing)}
+    private var model: LibraryBooksModel!
+    private var checkLeftBarButtonItemStatus: Bool {return (model.count > 0 && !tableView.isEditing)}
+    private var checkRightBarButtonItemStatus: Bool {return (!tableView.isEditing)}
 }
 
 extension LibraryBooksViewController {
@@ -41,6 +42,9 @@ extension LibraryBooksViewController {
         
         //allow users to select multiple table view cells when in edit mode
         tableView.allowsMultipleSelectionDuringEditing = true
+        
+        //Disable Edit and Sort navigation bar items if there are no rows in tableview.
+        handleLeftBarItems()
     }
     
     @objc func sortTapped(){
@@ -66,6 +70,7 @@ extension LibraryBooksViewController {
         deleteAllAlert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
         deleteAllAlert.popoverPresentationController?.barButtonItem  = self.navigationItem.leftBarButtonItem
         present(deleteAllAlert, animated: true)
+        handleRightBarItems()
     }
     
     @objc func deleteSelectedTapped(){
@@ -80,6 +85,7 @@ extension LibraryBooksViewController {
             deleteAlert.popoverPresentationController?.barButtonItem  = self.navigationItem.leftBarButtonItem
             present(deleteAlert, animated: true)
         }
+        handleRightBarItems()
     }
     
     @objc func cancelTapped(){
@@ -87,6 +93,7 @@ extension LibraryBooksViewController {
         navigationController?.setToolbarHidden(true, animated: false)
         tableView.isEditing = false
         handleLeftBarItems()
+        handleRightBarItems()
         
     }
     
@@ -96,12 +103,17 @@ extension LibraryBooksViewController {
         navigationController?.setToolbarHidden(false, animated: false)
         toolbarItems?.element(at: 4)?.isEnabled = false
         handleLeftBarItems()
+        handleRightBarItems()
     }
     
     func handleLeftBarItems(){
         //This function will set the Sort and Edit navigation bar button item to disabled if there are no Workout list items.
-        navigationItem.leftBarButtonItems![0].isEnabled = checkBarButtonItemStatus
-        navigationItem.leftBarButtonItems![1].isEnabled = checkBarButtonItemStatus
+        navigationItem.leftBarButtonItems![0].isEnabled = checkLeftBarButtonItemStatus
+        navigationItem.leftBarButtonItems![1].isEnabled = checkLeftBarButtonItemStatus
+    }
+    
+    func handleRightBarItems(){
+        navigationItem.rightBarButtonItems![0].isEnabled = checkRightBarButtonItemStatus
     }
     
     func sortWorkoutStruct(action: UIAlertAction){
@@ -114,18 +126,17 @@ extension LibraryBooksViewController {
         //This function will call deleteAllWorkoutList in WorkoutListModel.
         //WorkoutListModel will proceed to delete all persistence files associated with Workout objects one-by-one, delete all rows of Workout
         //object, and refresh the tableview.
-        model.deleteAllLibraryBooksList()
-        navigationController?.setToolbarHidden(true, animated: false)
+        
         tableView.isEditing = false
-        handleLeftBarItems()
+        navigationController?.setToolbarHidden(true, animated: false)
+        model.deleteAllLibraryBooksList()
     }
     
     func deleteSelectedLibraryBooksList(action: UIAlertAction){
         if let selectedRows = tableView.indexPathsForSelectedRows{
-            model.deleteSelectedLibraryBooksRow(indexPaths: selectedRows)
-            navigationController?.setToolbarHidden(true, animated: false)
             tableView.isEditing = false
-            handleLeftBarItems()
+            navigationController?.setToolbarHidden(true, animated: false)
+            model.deleteSelectedLibraryBooksRow(indexPaths: selectedRows)
         }
     }
     
@@ -221,7 +232,8 @@ extension LibraryBooksViewController: LibraryBooksModelDelegate {
     func dataRefreshed() {
         //refresh tableview
         tableView.reloadData()
-        //handleLeftBarItems()
+        handleLeftBarItems()
+        handleRightBarItems()
     }
 }
 
