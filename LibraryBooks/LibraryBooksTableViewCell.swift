@@ -18,8 +18,6 @@ final class LibraryBooksTableViewCell: UITableViewCell {
     func setup(with libraryBook: LibraryBook) {
         self.libraryBook = libraryBook
         
-        print(libraryBook)
-        
         titleLabel.text = libraryBook.bookTitle
         authorLabel.text = libraryBook.author
  

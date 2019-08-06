@@ -32,8 +32,10 @@ extension AddABookViewController{
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        //Set text field as a delegate
-        
+        //Update standard Text Fields/Text Views
+        bookTitleTextField.text = model.libraryBook.bookTitle
+        authorTextField.text = model.libraryBook.author
+        noteTextView.text = model.libraryBook.notes
         
         //Set dateReadTextField as a UIDatePicker object
         datePicker = UIDatePicker()
@@ -66,7 +68,11 @@ extension AddABookViewController{
     
     @IBAction func saveButtonTapped(_ sender: UIButton) {
        
-        model.saveLibraryBook(bookTitle: bookTitleTextField.text ?? "",
+
+
+
+
+       model.saveLibraryBook(bookTitle: bookTitleTextField.text ?? "",
                               author: authorTextField.text ?? "",
                               numberOfPages: Int(numberOfPages.text ?? "") ?? 0,
                               dateRead: datePicker.date,
