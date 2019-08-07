@@ -71,10 +71,6 @@ extension AddABookViewController{
     
     @IBAction func saveButtonTapped(_ sender: UIButton) {
        
-
-
-
-
        model.saveLibraryBook(bookTitle: bookTitleTextField.text ?? "",
                               author: authorTextField.text ?? "",
                               numberOfPages: Int(numberOfPages.text ?? "") ?? 0,
@@ -84,7 +80,7 @@ extension AddABookViewController{
     }
     
     @objc func datePickerValueChanged(sender: UIDatePicker) {
-                let formatter = DateFormatter()
+        let formatter = DateFormatter()
         formatter.dateStyle = DateFormatter.Style.medium
         formatter.timeStyle = DateFormatter.Style.none
         dateReadTextField.text = formatter.string(from: sender.date)
@@ -138,13 +134,28 @@ extension AddABookViewController{
 }
 
 extension AddABookViewController: UITextFieldDelegate {
+    
+    @IBAction func viewTapped(_ sender: UITapGestureRecognizer) {
+        //allow the user to click out anywhere on the view to end editing on one of the fields.
+        //having this function as a tap gesture recognizer will perform validation and enable saveButton
+        //if it passes.
+        
+        self.view.endEditing(true)  // this actually loops through all this view's subviews and resigns the first responder on all of them
+        
+        saveButton.isEnabled = model.validateField(bookTitle: bookTitleTextField.text ?? "", author: authorTextField.text ?? "", numberOfPages: Int(numberOfPages.text ?? "") ?? 0, dateRead: datePicker.date, ratingControl: ratingControl.rating)     //set enable properties by testing to see if a workout name is populated
+        
+        setSaveButtonAttribute()
+    }
+    
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
+        
         saveButton.isEnabled = model.validateField(bookTitle: bookTitleTextField.text ?? "", author: authorTextField.text ?? "", numberOfPages: Int(numberOfPages.text ?? "") ?? 0, dateRead: datePicker.date, ratingControl: ratingControl.rating)      //set enable properties by testing to see if a workout name is populated
+        
         setSaveButtonAttribute()
         
         return true

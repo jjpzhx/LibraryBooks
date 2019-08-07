@@ -33,6 +33,7 @@ final class LibraryBooksModel{
 }
 
 extension LibraryBooksModel {
+    
     func libraryBooks(atIndex index: Int) -> LibraryBook? {
         //returns a Workout object at a specified index
         return libraryBooks.element(at: index)
@@ -90,17 +91,18 @@ extension LibraryBooksModel {
         //This function is called when a user swipes on a tableview cell and selects delete or selects Delete from editing mode.
         //Reversing the loop through indexPaths array because if we do it in ascending order it will cause a fatal error if the last index
         //is selected.
-        for indexPath in indexPaths.reversed(){
-            
-            persistence?.deleteFile(libraryBook: libraryBooks(atIndex: indexPath.row)!)
-            libraryBooks.remove(at: indexPath.row)
-        }
+ 
+        let indexes = indexPaths.map{$0.row}
+        
+        indexes.reversed().forEach { persistence?.deleteFile(libraryBook: libraryBooks[$0]) }
+        indexes.reversed().forEach { libraryBooks.remove(at: $0) }
         
         delegate?.dataRefreshed()
     }
 }
 
 extension LibraryBooksModel: AddABookModelDelegate {
+    
     func save(libraryBook: LibraryBook) {
         //Check to see if UUID is already in Workout object. If it is then we are in editing mode.
         //Update Workout object by the index returned.
