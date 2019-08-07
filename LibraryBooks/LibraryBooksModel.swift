@@ -29,6 +29,7 @@ final class LibraryBooksModel{
         let persistence = ApplicationSession.sharedInstance.persistence
         self.persistence = persistence
         libraryBooks = persistence?.savedLibraryBooks ?? []
+        
     }
 }
 
@@ -91,12 +92,13 @@ extension LibraryBooksModel {
         //This function is called when a user swipes on a tableview cell and selects delete or selects Delete from editing mode.
         //Reversing the loop through indexPaths array because if we do it in ascending order it will cause a fatal error if the last index
         //is selected.
- 
-        let indexes = indexPaths.map{$0.row}
         
-        indexes.reversed().forEach { persistence?.deleteFile(libraryBook: libraryBooks[$0]) }
-        indexes.reversed().forEach { libraryBooks.remove(at: $0) }
+        //let indexes = indexPaths.map{$0.row}
+        let indexes = indexPaths.sorted().reversed().map{$0.row}   //this should sort the indexes in descending order
         
+        indexes.forEach { persistence?.deleteFile(libraryBook: libraryBooks[$0]) }
+        indexes.forEach { libraryBooks.remove(at: $0) }
+       
         delegate?.dataRefreshed()
     }
 }

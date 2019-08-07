@@ -48,6 +48,7 @@ extension LibraryBooksViewController {
         
         //Disable Edit and Sort navigation bar items if there are no rows in tableview.
         handleLeftBarItems()
+        
     }
 }
 
