@@ -41,58 +41,63 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BookList" id="Mcw-hS-6hd" customClass="LibraryBooksTableViewCell" customModule="LibraryBooks" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="374" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="BookList" rowHeight="85" id="Mcw-hS-6hd" customClass="LibraryBooksTableViewCell" customModule="LibraryBooks" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="374" height="85"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Mcw-hS-6hd" id="Bq9-Mo-eSV">
-                                            <rect key="frame" x="0.0" y="0.0" width="336" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="336" height="84.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="101" translatesAutoresizingMaskIntoConstraints="NO" id="K9k-SP-4tG">
-                                                    <rect key="frame" x="0.0" y="0.0" width="336" height="43.5"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="q6H-uz-kjG" userLabel="Main Stack View">
+                                                    <rect key="frame" x="0.0" y="0.0" width="336" height="84.5"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="pCO-ag-0qc" userLabel="LeftStackView">
-                                                            <rect key="frame" x="0.0" y="0.0" width="34" height="43.5"/>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="TH3-AX-jqV" userLabel="First Row Stack View">
+                                                            <rect key="frame" x="0.0" y="0.0" width="336" height="38.5"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="paa-lW-m4d">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="34" height="20.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dVX-Od-ZFa">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="168" height="38.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Author" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eLh-vQ-hQC">
-                                                                    <rect key="frame" x="0.0" y="21.5" width="34" height="20.5"/>
+                                                                <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="THm-Jv-GK4" customClass="RatingControl" customModule="LibraryBooks" customModuleProvider="target">
+                                                                    <rect key="frame" x="168" y="0.0" width="168" height="38.5"/>
+                                                                </stackView>
+                                                            </subviews>
+                                                        </stackView>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ptl-qh-Xmh" userLabel="Second Row Stack View">
+                                                            <rect key="frame" x="0.0" y="46.5" width="336" height="38"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cvT-vJ-TyA">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="168" height="38"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Date Read" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nU0-oe-wBL">
-                                                                    <rect key="frame" x="0.0" y="43" width="34" height="0.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date Read" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ndw-Rs-G3l">
+                                                                    <rect key="frame" x="168" y="0.0" width="168" height="38"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                             </subviews>
                                                         </stackView>
-                                                        <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="aPF-m5-BhL" userLabel="RatingControlStackView" customClass="RatingControl" customModule="LibraryBooks" customModuleProvider="target">
-                                                            <rect key="frame" x="135" y="0.0" width="201" height="43.5"/>
-                                                        </stackView>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="K9k-SP-4tG" secondAttribute="bottom" id="IpU-VS-Rij"/>
-                                                <constraint firstItem="K9k-SP-4tG" firstAttribute="top" secondItem="Bq9-Mo-eSV" secondAttribute="top" id="Sbn-EL-iYy"/>
-                                                <constraint firstItem="K9k-SP-4tG" firstAttribute="leading" secondItem="Bq9-Mo-eSV" secondAttribute="leading" id="Uun-XW-oBZ"/>
-                                                <constraint firstAttribute="trailing" secondItem="K9k-SP-4tG" secondAttribute="trailing" id="X62-G6-4uT"/>
+                                                <constraint firstItem="q6H-uz-kjG" firstAttribute="top" secondItem="Bq9-Mo-eSV" secondAttribute="top" id="0nM-BQ-brx"/>
+                                                <constraint firstItem="q6H-uz-kjG" firstAttribute="leading" secondItem="Bq9-Mo-eSV" secondAttribute="leading" id="K90-GS-geY"/>
+                                                <constraint firstAttribute="bottom" secondItem="q6H-uz-kjG" secondAttribute="bottom" id="qIC-xZ-4Zk"/>
+                                                <constraint firstAttribute="trailing" secondItem="q6H-uz-kjG" secondAttribute="trailing" id="x7E-OM-Wqt"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <accessibility key="accessibilityConfiguration" identifier="BookList"/>
                                         <connections>
-                                            <outlet property="authorLabel" destination="eLh-vQ-hQC" id="lQt-XG-c5F"/>
-                                            <outlet property="dateReadLabel" destination="nU0-oe-wBL" id="PMW-a7-lAc"/>
-                                            <outlet property="ratingControlStackView" destination="aPF-m5-BhL" id="B7d-0Z-W11"/>
-                                            <outlet property="titleLabel" destination="paa-lW-m4d" id="Htu-1v-ZrR"/>
+                                            <outlet property="authorLabel" destination="cvT-vJ-TyA" id="713-4F-MPl"/>
+                                            <outlet property="dateReadLabel" destination="ndw-Rs-G3l" id="yKm-Cw-pXb"/>
+                                            <outlet property="ratingControlStackView" destination="THm-Jv-GK4" id="IeZ-ns-EiX"/>
+                                            <outlet property="titleLabel" destination="dVX-Od-ZFa" id="H7d-la-IMx"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

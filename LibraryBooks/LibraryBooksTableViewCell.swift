@@ -15,14 +15,20 @@ final class LibraryBooksTableViewCell: UITableViewCell {
     @IBOutlet weak var ratingControlStackView: RatingControl!
     @IBOutlet weak var dateReadLabel: UILabel!
     
+    
+    
     private(set) var libraryBook: LibraryBook!
     
     func setup(with libraryBook: LibraryBook) {
         self.libraryBook = libraryBook
         
+        let formatter = DateFormatter()
+        formatter.dateStyle = DateFormatter.Style.medium
+        formatter.timeStyle = DateFormatter.Style.none
+        
         titleLabel.text = libraryBook.bookTitle
         authorLabel.text = libraryBook.author
-        dateReadLabel.text = "\(libraryBook.dateRead)"
+        dateReadLabel.text = formatter.string(from: libraryBook.dateRead)
         ratingControlStackView.rating = libraryBook.ratingControl
      }
 }
